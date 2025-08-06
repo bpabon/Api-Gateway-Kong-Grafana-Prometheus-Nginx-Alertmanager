@@ -1,6 +1,6 @@
 ## 📡 API Gateway con Kong + Observabilidad con Grafana & Prometheus + Alertas vía Email + Nginx
 
-Este proyecto implementa un API Gateway robusto con Kong, habilitando tanto rutas públicas como protegidas por JWT RS256 por NestJs, y complementado con un stack completo de observabilidad (Prometheus + Grafana + Alertmanager). Además, se incluye un reverso proxy con NGINX y se provee configuración para habilitar certificados SSL usando Certbot.
+Este proyecto implementa un API Gateway robusto con Kong, habilitando tanto rutas públicas como protegidas por JWT RS256 por NestJs, y complementado con un stack completo de observabilidad (Prometheus + Grafana + Alertmanager). Además, se incluye un proxy inverso con NGINX y se provee configuración para habilitar certificados SSL usando Certbot.
 
 ### 🚀 Objetivos Principales
 - Gestionar peticiones a microservicios a través de Kong API Gateway
@@ -11,7 +11,8 @@ Este proyecto implementa un API Gateway robusto con Kong, habilitando tanto ruta
 
 ### Autor
 - [Branm Aldair Pabon Villamizar](https://github.com/bpabon)
-
+[![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://portafilio-person-portafolio3103032-frontend-3eea11f21b7b3a6e28.gitlab.io/)
+[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](www.linkedin.com/in/branm-aldair-pabon-villamizar-63ab88210)
 ### 🧱 Arquitectura de Servicios
 A continuación se muestra un diagrama que ilustra cómo interactúan los diferentes componentes del sistema, desde la entrada del tráfico HTTPS hasta la capa de observabilidad y alertas:
 ![Arquitectura de software](./img/arquitectura.png)
@@ -37,7 +38,7 @@ graph TD
 | **Grafana**           | 3001        | Visualización de métricas                     |
 | **Alertmanager**      | 9093        | Envío de alertas vía correo electrónico       |
 | **Blackbox Exporter** | 9115        | Chequeo de disponibilidad de endpoints (Ping) |
-| **NGINX**             | 80/443      | Proxy reverso + futuro soporte HTTPS          |
+| **NGINX**             | 80/443      | Proxy inversos + futuro soporte HTTPS          |
 
 ### 🔐 Seguridad
 - Rutas de Kong configuradas con y sin JWT RS256
@@ -143,6 +144,18 @@ Levanta todos los servicios en segundo plano:
 
 ```
 - Guarda los cambios. Este archivo será leído por Docker y Alertmanager para configurar el envío de alertas vía correo electrónico.
+### URLs de Acceso a los Servicios
+A continuación se listan las direcciones para acceder a los servicios desplegados en el proyecto:
+| URL                                                                      | Servicio          | Notas / Credenciales                      |
+| ------------------------------------------------------------------------ | ----------------- | ----------------------------------------- |
+| [http://localhost:3001/login](http://localhost:3001/login)               | Grafana           | Usuario: `admin` <br> Contraseña: `admin` |
+| [http://localhost:9093/#/alerts](http://localhost:9093/#/alerts)         | AlertManager      | Panel de alertas                          |
+| [http://localhost:3000/public/hello](http://localhost:3000/public/hello) | NestJS            | Endpoint público                          |
+| [http://midominio.com/public/hello](http://midominio.com/public/hello)   | Nginx (Proxy)     | Ruta pública via dominio configurado      |
+| [http://localhost:8001](http://localhost:8001)                           | Admin API Kong    | Interfaz de administración de Kong        |
+| [http://localhost:8000/public/hello](http://localhost:8000/public/hello) | Servicio API Kong | Endpoint público gestionado por Kong      |
+| [http://localhost:9115/](http://localhost:9115/)                         | Blackbox Exporter | Servicio para monitoreo de endpoints      |
+
 ### 📢 Recomendaciones
 - Cambia las credenciales por defecto de Grafana
 - Asegúrate de que tu dominio esté correctamente apuntado a tu servidor
