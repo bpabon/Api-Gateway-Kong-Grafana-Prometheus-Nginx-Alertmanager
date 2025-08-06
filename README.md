@@ -154,7 +154,7 @@ A continuación se listan las direcciones para acceder a los servicios desplegad
 | [http://midominio.com/public/hello](http://midominio.com/public/hello)   | Nginx (Proxy)     | Ruta pública via dominio configurado      |
 | [http://localhost:8001](http://localhost:8001)                           | Admin API Kong    | Interfaz de administración de Kong        |
 | [http://localhost:8000/public/hello](http://localhost:8000/public/hello) | Servicio API Kong | Endpoint público gestionado por Kong      |
-| [http://localhost:8000/public/hello](http://localhost:8000/api/users/jwt)| Servicio API Kong | Endpoint protegido gestionado por Kong      |
+|[http://localhost:8000/api/users/jwt](http://localhost:8000/api/users/jwt)| Servicio API Kong | Endpoint protegido gestionado por Kong    |
 | [http://localhost:9115/](http://localhost:9115/)                         | Blackbox Exporter | Servicio para monitoreo de endpoints      |
 
 ### 📢 Recomendaciones
