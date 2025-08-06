@@ -1,0 +1,104 @@
+_format_version: "3.0"
+consumers:
+  - username: test-user
+    custom_id: '1'
+    jwt_secrets:
+      - key: my-issuer
+        algorithm: RS256
+        rsa_public_key: | # Importante El operador | indica que el contenido es un bloque multilínea.
+                  -----BEGIN PUBLIC KEY-----
+                  MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2bsLNOm2V6plQ8KVB5xz
+                  ATJ53fK9bhVjtkSyYV+cY9qVU6+dH2B9fU7GlURyej4ViLHWJMhO753LxKQkUMy4
+                  qdM/iUCC8tutjt6mWJh7T4DG7d7qg08qe/51XJu/M1o0ZQVej3DG+wCcz+Vbx3OK
+                  gogu937NbPgRTXa11SqbiDcCIoM5Wu2kOehyB03WmDitk7SRFwyzrmhbns/UZ4tj
+                  WTcP3h31govOw3UMwxib64VlgXYNP7E+z/eGFJnG7/aBX8nwwHlUM2ujLicjhwQu
+                  bLenw2JK3cpjX72TuM64EEy1KtfEaOZQ+1PaGMJOBg5Nb6DTf5xirruzZA/GL+jc
+                  bQIDAQAB
+                  -----END PUBLIC KEY-----
+
+
+plugins:
+  - name: prometheus
+    enabled: true
+    config:
+      per_consumer: false  # evita métricas por consumidor si no los usas
+      status_code_metrics: true
+      latency_metrics: true
+      bandwidth_metrics: true
+      upstream_health_metrics: true
+  # Rate Limiting — Limitar la cantidad de peticiones por consumidor o IP
+  # - name: rate-limiting
+  #   config:
+  #     minute: 250          # máximo 100 peticiones por minuto
+  #     policy: local        # o "redis" si quieres usar múltiples nodos
+  #     limit_by: ip         # 👈 esta es la clave
+    # enabled: true
+  # # Bot Detection — Detecta crawlers automatizados
+  - name: bot-detection
+    enabled: true
+  # IP Restriction — Permitir/bloquear IPs
+  - name: ip-restriction
+    config:
+      # allow:
+      #   - "203.0.113.1" # Permitir una sola dirección IP
+      #   - "192.0.2.0/24" # Permitir un rango CIDR
+      deny:
+        - "10.0.0.5" # Deny a specific IP address within an allowed range (if applicable)
+      status: 403 # Optional: Customize the HTTP status code for rejected requests (default is 403)
+      message: "Acceso prohibido desde su dirección IP." # Optional: Customize the message for rejected requests
+  # Request Size Limit — Evita abusos con payloads grandes
+  - name: request-size-limiting
+    config:
+      allowed_payload_size: 10000  # en KB serian 10 mb
+    enabled: true
+  # cors de sitios que quiero permitir el acceso
+  - name: cors
+    config:
+      origins:
+      - http://localhost
+      methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - PATCH
+      headers:
+      - Accept
+      - Authorization
+      - Content-Type
+      credentials: true
+      max_age: 3600
+services:
+  - name: nestjs-service
+    url: http://nestjs:3000
+    routes:
+      - name: public-routes
+        paths:
+          - /public
+        strip_path: false
+        plugins:
+          - name: rate-limiting
+            config:
+              second: 2 # ⏱️ Máx. 2 peticiones por segundo
+              minute: 50 # 🕐 Máx. 50 por minuto
+              hour: 500 # 🕐 Máx. 500 por hora
+              policy: local
+              limit_by: ip
+            enabled: true
+      # Rutas protejidas por JWT
+      - name: protected-routes
+        paths:
+          - /api
+        strip_path: false
+        plugins:
+          - name: jwt
+            enabled: true
+          - name: rate-limiting
+            config:
+              second: 5       # ⏱️ Máx. 5 peticiones por segundo
+              minute: 250     # 🕐 Máx. 100 por minuto
+              hour: 1500      # 🕐 Máx. 1500 por hora
+              policy: local
+              limit_by: ip
+            enabled: true
+

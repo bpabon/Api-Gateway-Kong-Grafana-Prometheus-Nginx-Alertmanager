@@ -1,0 +1,54 @@
+groups:
+  - name: kong-alerts
+    rules:
+      # Alerta si Kong deja de responder (endpoint /metrics)
+      - alert: KongDown
+        expr: up{job="kong"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Kong API Gateway no responde"
+          description: "No se ha podido scrapear Kong durante más de 1 minuto."
+
+      # Alerta si hay más del 5% de errores 5xx en 5 minutos
+      - alert: HighErrorRate
+        expr: sum(rate(kong_http_status{code=~"5.."}[5m])) / sum(rate(kong_http_status[5m])) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Alta tasa de errores 5xx en Kong"
+          description: "Más del 5% de las peticiones resultan en errores 5xx durante los últimos 5 minutos."
+
+      # Alerta si hay más del 10% de errores 4xx en 5 minutos (opcional)
+      - alert: HighClientErrorRate
+        expr: sum(rate(kong_http_status{code=~"4.."}[5m])) / sum(rate(kong_http_status[5m])) > 0.10
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Alta tasa de errores 4xx en Kong"
+          description: "Más del 10% de las peticiones resultan en errores 4xx durante los últimos 5 minutos."
+  # Reglas para validar si se cae algun servicio del API        
+  - name: blackbox-alerts
+    rules:
+    - alert: ServicioInaccesible
+      expr: probe_success == 0
+      for: 30s
+      labels:
+        severity: critical
+      annotations:
+        summary: "Servicio inaccesible: {{ $labels.instance }}"
+        description: "No se pudo acceder al endpoint {{ $labels.instance }} en los últimos 30 segundos."
+  # Reglas para NGINX en caso de caida
+  - name: nginx_alerts
+    rules:
+      - alert: NginxDown
+        expr: probe_success{job="nginx-http"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Nginx no responde"
+          description: "La instancia {{ $labels.instance }} está caída por más de 1 minuto."
