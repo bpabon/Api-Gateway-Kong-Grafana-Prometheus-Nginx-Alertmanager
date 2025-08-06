@@ -11,8 +11,8 @@ Este proyecto implementa un API Gateway robusto con Kong, habilitando tanto ruta
 
 ### Autor
 - [Branm Aldair Pabon Villamizar](https://github.com/bpabon)
-[![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://portafilio-person-portafolio3103032-frontend-3eea11f21b7b3a6e28.gitlab.io/)
-[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](www.linkedin.com/in/branm-aldair-pabon-villamizar-63ab88210)
+- [![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://portafilio-person-portafolio3103032-frontend-3eea11f21b7b3a6e28.gitlab.io/)
+- [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/branm-aldair-pabon-villamizar-63ab88210)
 ### 🧱 Arquitectura de Servicios
 A continuación se muestra un diagrama que ilustra cómo interactúan los diferentes componentes del sistema, desde la entrada del tráfico HTTPS hasta la capa de observabilidad y alertas:
 ![Arquitectura de software](./img/arquitectura.png)
