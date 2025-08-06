@@ -66,31 +66,7 @@ El proyecto incluye configuración preliminar para emitir certificados SSL con C
 ```
 ### 📁 Estructura del Proyecto
 .
-├── docker-compose.yml
-├── kong/
-│   ├── kong.yml                      # Configuración declarativa de rutas y plugins
-│   └── kong.conf                     # Configuración base de Kong
-├── nestjs-service/                   # Microservicio NestJS
-├── prometheus/   
-│   ├── prometheus.yml                # Scrape targets
-│   └── alert.rules.yml               # Reglas de alerta
-├── grafana/    
-│   └── provisioning/                 # Dashboards y datasources prediseñados
-│       └── dashboards                # Carpeta de dashboard para usar en grafana
-│       |    ├── dashboards.yml       # Configuración del dashboard
-│       |    └── kong-dashboard.json  # JSON para la observabilidad del dashboard
-│       └── datasources               # Carpeta para funte de datos con prometheus
-│            └── prometheus.yml       # Configuración de datasources para grafana con el type prometheus 
-├── alertmanager/   
-│   └── alertmanager.yml              # Configuración de envío de alertas por correo
-│   └── Dockerfile                    # Archivo de docker requerido para el uso de variables de entorno
-│   └── entrypoint.sh                 # Remplaza los valores de las variables de entorno
-├── blackbox/   
-│   └── blackbox.yml                  # Configuración de chequeos HTTP
-├── nginx/    
-│   ├── nginx.conf                    # Configuración del reverse proxy
-│   └── logs/                         # Logs de NGINX
-└── certbot/                          # (Ajustar manualmente) Certificados SSL
+![Estructura del Proyecto](./img/estructura.png)
 
 ### 🛠️ Cómo generar un token JWT (RS256)
 - Tener tu par de claves (privada y pública):
